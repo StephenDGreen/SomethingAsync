@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Something.Application;
+using System.Threading.Tasks;
 
 namespace Something.API.Controllers
 {
@@ -22,53 +23,53 @@ namespace Something.API.Controllers
         }
         [HttpPost]
         [Route("api/thingselse")]
-        public ActionResult CreateElse([FromForm] string name, [FromForm] string[] othername)
+        public async Task<IActionResult> CreateElseAsync([FromForm] string name, [FromForm] string[] othername)
         {
             if (name.Length < 1)
-                return GetAllSomethingElseIncludeSomething();
+                return await GetAllSomethingElseIncludeSomethingAsync();
 
-            createInteractor.CreateSomethingElse(name, othername);
-            return GetAllSomethingElseIncludeSomething();
+            await createInteractor.CreateSomethingElseAsync(name, othername);
+            return await GetAllSomethingElseIncludeSomethingAsync();
         }
         [HttpPut]
         [Route("api/thingselse/{id}")]
-        public ActionResult Put(int id, [FromForm] string othername)
+        public async Task<ActionResult> PutAsync(int id, [FromForm] string othername)
         {
             if (id < 1)
-                return GetAllSomethingElseIncludeSomething();
+                return await GetAllSomethingElseIncludeSomethingAsync();
 
-            updateInteractor.UpdateSomethingElseAddSomething(id, othername);
-            return GetAllSomethingElseIncludeSomething();
+            await updateInteractor.UpdateSomethingElseAddSomethingAsync(id, othername);
+            return await GetAllSomethingElseIncludeSomethingAsync();
         }
         [HttpDelete]
         [Route("api/thingselse/{else_id}/{something_id}")]
-        public ActionResult Delete(int else_id, int something_id)
+        public async Task<ActionResult> DeleteAsync(int else_id, int something_id)
         {
             if (else_id < 1 || something_id < 1)
-                return GetAllSomethingElseIncludeSomething();
+                return await GetAllSomethingElseIncludeSomethingAsync();
 
-            updateInteractor.UpdateSomethingElseDeleteSomething(else_id, something_id);
-            return GetAllSomethingElseIncludeSomething();
+            await updateInteractor.UpdateSomethingElseDeleteSomethingAsync(else_id, something_id);
+            return await GetAllSomethingElseIncludeSomethingAsync();
         }
         [HttpDelete]
         [Route("api/thingselse/{else_id}")]
-        public ActionResult Delete(int else_id)
+        public async Task<ActionResult> DeleteAsync(int else_id)
         {
             if (else_id < 1)
-                return GetAllSomethingElseIncludeSomething();
+                return await GetAllSomethingElseIncludeSomethingAsync();
 
-            deleteInteractor.DeleteSomethingElse(else_id);
-            return GetAllSomethingElseIncludeSomething();
+            await deleteInteractor.DeleteSomethingElseAsync(else_id);
+            return await GetAllSomethingElseIncludeSomethingAsync();
         }
         [HttpGet]
         [Route("api/thingselse")]
-        public ActionResult GetElseList()
+        public async Task<ActionResult> GetElseListAsync()
         {
-            return GetAllSomethingElseIncludeSomething();
+            return await GetAllSomethingElseIncludeSomethingAsync();
         }
-        private ActionResult GetAllSomethingElseIncludeSomething()
+        private async Task<ActionResult> GetAllSomethingElseIncludeSomethingAsync()
         {
-            var result = readInteractor.GetSomethingElseIncludingSomethingsList();
+            var result = await readInteractor.GetSomethingElseIncludingSomethingsListAsync();
             return Ok(result);
         }
     }

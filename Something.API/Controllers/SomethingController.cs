@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Something.Application;
+using System.Threading.Tasks;
 
 namespace Something.API.Controllers
 {
@@ -20,24 +21,24 @@ namespace Something.API.Controllers
 
         [HttpPost]
         [Route("api/things")]
-        public ActionResult Create([FromForm] string name)
+        public async Task<ActionResult> CreateAsync([FromForm] string name)
         {
             if (name.Length < 1)
-                return GetAll();
+                return await GetAllAsync();
 
             createInteractor.CreateSomething(name);
-            return GetAll();
+            return await GetAllAsync();
         }
 
         [HttpGet]
         [Route("api/things")]
-        public ActionResult GetList()
+        public async Task<ActionResult> GetListAsync()
         {
-            return GetAll();
+            return await GetAllAsync();
         }
-        private ActionResult GetAll()
+        private async Task<ActionResult> GetAllAsync()
         {
-            var result = readInteractor.GetSomethingList();
+            var result = await readInteractor.GetSomethingListAsync();
             return Ok(result);
         }
     }
